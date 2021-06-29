@@ -13,10 +13,7 @@ const addUser = (id: number, name: string, room: number) => {
   return { user };
 };
 
-const getUser = (id: number) => {
-  let user = users.find((user) => user.id == id);
-  return user;
-};
+const getUser = (id: number) => users.find((user) => user.id == id);
 
 const deleteUser = (id: number) => {
   const index = users.findIndex((user) => user.id === id);
@@ -29,4 +26,9 @@ const getUsersInRoom = (room: number) =>
     .reverse()
     .filter((user, index) => index < 2);
 
-export { addUser, getUser, deleteUser, getUsersInRoom };
+const getOtherUserInRoom = (room: number, userName: string) =>
+  users
+    .filter((user) => user.room === room)
+    .find((user) => user.name !== userName);
+
+export { addUser, getUser, deleteUser, getUsersInRoom, getOtherUserInRoom };
