@@ -20,52 +20,37 @@ io.on('connection', (socket) => {
     const { user, error } = addUser(socket.id, name, room);
     if (error) return callback({ error });
     socket.join(user.room);
-    socket.in(room).emit('notification', {
-      title: "Someone's here",
-      description: `${user.name} just entered the room`,
-    });
-    io.in(room).emit('users', getUsersInRoom(room));
+    let users = getUsersInRoom(room);
+    if (users.length === 2) {
+      io.in(room).emit('startGame', {
+        users,
+        user: name,
+        room,
+      });
+    }
     callback({ success: true });
   });
 
-  socket.on('sendMessage', (message) => {
+  function sendMessage(type) {
     const user = getUser(socket.id);
     if (user) {
       let other = getOtherUserInRoom(user.room, user.name);
       if (other) {
-        io.to(other.id).emit('message', { user: user.name, text: message });
+        io.to(other.id).emit('message', { user: user.name, type });
       }
     }
-  });
+  }
 
   socket.on('updateScore', () => {
-    const user = getUser(socket.id);
-    if (user) {
-      let other = getOtherUserInRoom(user.room, user.name);
-      if (other) {
-        io.to(other.id).emit('scoreUpdated', { user: user.name });
-      }
-    }
+    sendMessage('scoreUpdated');
   });
 
   socket.on('gameOver', () => {
-    const user = getUser(socket.id);
-    if (user) {
-      let other = getOtherUserInRoom(user.room, user.name);
-      if (other) {
-        io.to(other.id).emit('announceWinner', { user: user.name });
-      }
-    }
+    sendMessage('announceWinner');
   });
 
   socket.on('reset', () => {
-    const user = getUser(socket.id);
-    if (user) {
-      let other = getOtherUserInRoom(user.room, user.name);
-      if (other) {
-        io.to(other.id).emit('resetGame', { user: user.name });
-      }
-    }
+    sendMessage('resetGame');
   });
 
   socket.on('disconnect', () => {
