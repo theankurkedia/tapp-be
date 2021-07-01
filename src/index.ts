@@ -1,8 +1,10 @@
 const app = require('express')();
 const cors = require('cors');
 const http = require('http').createServer(app);
-const PORT = process.env.PORT || 8080;
 const io = require('socket.io')(http);
+
+const PORT = process.env.PORT || 8080;
+
 const {
   addUser,
   getUser,
@@ -15,6 +17,7 @@ const { router } = require('./router');
 
 app.use(cors());
 app.use(router);
+
 http.listen(PORT, () => {
   console.log(`listening on *:${PORT}`);
 });
