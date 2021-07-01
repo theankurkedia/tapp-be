@@ -1,4 +1,5 @@
 const app = require('express')();
+const cors = require('cors');
 const http = require('http').createServer(app);
 const PORT = 8080;
 const io = require('socket.io')(http);
@@ -10,6 +11,7 @@ let {
   getOtherUserInRoom,
 } = require('./users');
 
+app.use(cors());
 http.listen(PORT, () => {
   console.log(`listening on *:${PORT}`);
 });
