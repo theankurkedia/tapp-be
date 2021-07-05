@@ -30,11 +30,8 @@ io.on('connection', (socket) => {
     socket.join(user.room);
     let users = getUsersInRoom(room);
     if (users.length === 2) {
-      let other = getOtherUserInRoom(user.room, user.name);
       io.in(room).emit('startGame', {
         users,
-        localUser: name,
-        opponentUser: other.name,
         room,
       });
     }
