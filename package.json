@@ -8,7 +8,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "build": "tsc"
   },
   "dependencies": {
     "cors": "^2.8.5",
