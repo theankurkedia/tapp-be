@@ -2,9 +2,6 @@
   "name": "tappy-backend",
   "version": "0.0.1",
   "description": "Tappy backend",
-  "engines": {
-    "node": "16.x"
-  },
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
